@@ -17,6 +17,7 @@ class Firebase {
 
     this.auth = firebase.auth();
     this.db = firebase.database();
+    this.facebookProvider = new firebase.auth.FacebookAuthProvider();
   }
 
   // *** Auth API ***
