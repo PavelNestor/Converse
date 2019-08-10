@@ -180,6 +180,7 @@ const SignInFacebook = compose(
 )(SignInFacebookBase);
 
 export default SignInPage;
+
 export { SignInForm, SignInGoogle, SignInFacebook };
 
 // <script>
@@ -224,5 +225,3 @@ export { SignInForm, SignInGoogle, SignInFacebook };
 //     statusChangeCallback(response);
 //   });
 // }
-export default SignInPage;
-export { SignInForm, SignInGoogle };
