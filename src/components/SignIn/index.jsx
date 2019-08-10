@@ -224,3 +224,5 @@ export { SignInForm, SignInGoogle, SignInFacebook };
 //     statusChangeCallback(response);
 //   });
 // }
+export default SignInPage;
+export { SignInForm, SignInGoogle };
