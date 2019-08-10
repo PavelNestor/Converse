@@ -4,6 +4,7 @@ import { compose } from 'recompose';
 
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
+import * as ROLES from '../../constants/roles';
 
 const SignUpPage = () => (
   <div>
@@ -17,6 +18,7 @@ const INITIAL_STATE = {
   email: '',
   passwordOne: '',
   passwordTwo: '',
+  isAdmin: false,
   error: null
 };
 
@@ -29,10 +31,22 @@ class SignUpFormBase extends Component {
   onSubmit = event => {
     event.preventDefault();
 
-    const { username, email, passwordOne } = this.state;
+    const { username, email, passwordOne, isAdmin } = this.state;
+
+    const roles = {};
+    if (isAdmin) {
+      roles[ROLES.ADMIN] = ROLES.ADMIN;
+    }
 
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
+      .then(authUser => {
+        return this.props.firebase.user(authUser.user.uid).set({
+          username,
+          email,
+          roles
+        });
+      })
       .then(authUser => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME);
@@ -46,8 +60,12 @@ class SignUpFormBase extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  onChangeCheckbox = event => {
+    this.setState({ [event.target.name]: event.target.checked });
+  };
+
   render() {
-    const { username, email, passwordOne, passwordTwo, error } = this.state;
+    const { username, email, passwordOne, passwordTwo, isAdmin, error } = this.state;
     const isInvalid =
       passwordOne !== passwordTwo || passwordOne === '' || email === '' || username === '';
 
@@ -88,6 +106,16 @@ class SignUpFormBase extends Component {
         <button disabled={isInvalid} type="submit">
           Sign Up
         </button>
+
+        <label>
+          Admin:
+          <input
+            name="isAdmin"
+            type="checkbox"
+            checked={isAdmin}
+            onChange={this.onChangeCheckbox}
+          />
+        </label>
 
         {error && <p>{error.message}</p>}
       </form>
