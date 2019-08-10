@@ -1,5 +1,6 @@
 import firebase from 'firebase/firebase';
 import 'firebase/auth';
+import 'firebase/database'; //TODO change to firestore
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -15,8 +16,10 @@ class Firebase {
     firebase.initializeApp(config);
 
     this.auth = firebase.auth();
+    this.db = firebase.database();
   }
 
+  // *** Auth API ***
   doCreateUserWithEmailAndPassword = (email, password) =>
     this.auth.createUserWithEmailAndPassword(email, password);
 
@@ -29,5 +32,32 @@ class Firebase {
 
   doPasswordUpdate = password =>
     this.auth.currentUser.updatePassword(password);
+
+  // *** Merge Auth and DB User API *** //
+  onAuthUserListener = (next, fallback) =>
+    this.auth.onAuthStateChanged(authUser => {
+      if (authUser) {
+        this.user(authUser.uid)
+          .once('value')
+          .then(snapshot => {
+            const dbUser = snapshot.val();
+            if (!dbUser.roles) {
+              dbUser.roles = {};
+            }
+            authUser = {
+              uid: authUser.uid,
+              email: authUser.email,
+              ...dbUser,
+            };
+            next(authUser);
+          });
+      } else {
+        fallback();
+      }
+    });
+
+  // *** User API ***
+  user = uid => this.db.ref(`users/${uid}`);
+  users = () => this.db.ref('users');
 }
 export default Firebase;
