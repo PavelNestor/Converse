@@ -15,6 +15,7 @@ class Firebase {
   constructor() {
     firebase.initializeApp(config);
 
+    this.emailAuthProvider = firebase.auth.EmailAuthProvider;
     this.auth = firebase.auth();
     this.db = firebase.database();
     this.facebookProvider = new firebase.auth.FacebookAuthProvider();
@@ -31,12 +32,20 @@ class Firebase {
   doSignInWithGoogle = () =>
     this.auth.signInWithPopup(this.googleProvider);
 
+  doSignInWithFacebook = () =>
+    this.auth.signInWithPopup(this.facebookProvider)
+
   doSignOut = () => this.auth.signOut();
 
   doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
 
   doPasswordUpdate = password =>
     this.auth.currentUser.updatePassword(password);
+
+  doSendEmailVerification = () =>
+    this.auth.currentUser.sendEmailVerification({
+      url: process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT,
+    });
 
   // *** Merge Auth and DB User API *** //
   onAuthUserListener = (next, fallback) =>
@@ -52,6 +61,8 @@ class Firebase {
             authUser = {
               uid: authUser.uid,
               email: authUser.email,
+              emailVerified: authUser.emailVerified,
+              providerData: authUser.providerData,
               ...dbUser,
             };
             next(authUser);
