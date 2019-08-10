@@ -15,9 +15,10 @@ class Firebase {
   constructor() {
     firebase.initializeApp(config);
 
+    this.emailAuthProvider = firebase.auth.EmailAuthProvider;
     this.auth = firebase.auth();
-    this.db = firebase.database();
-
+    this.db = firebase.database();\
+    this.facebookProvider = new firebase.auth.FacebookAuthProvider();
     this.googleProvider = new firebase.auth.GoogleAuthProvider();
   }
 
@@ -30,6 +31,9 @@ class Firebase {
 
   doSignInWithGoogle = () =>
     this.auth.signInWithPopup(this.googleProvider);
+
+  doSignInWithFacebook = () =>
+    this.auth.signInWithPopup(this.facebookProvider)
 
   doSignOut = () => this.auth.signOut();
 
