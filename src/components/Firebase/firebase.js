@@ -1,6 +1,7 @@
 import firebase from 'firebase/firebase';
 import 'firebase/auth';
 import 'firebase/database'; //TODO change to firestore
+import 'firebase/firestore';
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -18,6 +19,7 @@ class Firebase {
     this.emailAuthProvider = firebase.auth.EmailAuthProvider;
     this.auth = firebase.auth();
     this.db = firebase.database();
+    this.firestore = firebase.firestore();
     this.facebookProvider = new firebase.auth.FacebookAuthProvider();
     this.googleProvider = new firebase.auth.GoogleAuthProvider();
   }
@@ -51,10 +53,10 @@ class Firebase {
   onAuthUserListener = (next, fallback) =>
     this.auth.onAuthStateChanged(authUser => {
       if (authUser) {
-        this.user(authUser.uid)
-          .once('value')
+        this.fsUser(authUser.uid)
+          .get()
           .then(snapshot => {
-            const dbUser = snapshot.val();
+            const dbUser = snapshot.data();
             if (!dbUser.roles) {
               dbUser.roles = {};
             }
@@ -72,8 +74,12 @@ class Firebase {
       }
     });
 
-  // *** User API ***
+  // *** User API *** TODO - remove realtime database
   user = uid => this.db.ref(`users/${uid}`);
   users = () => this.db.ref('users');
+
+  // *** User API ***
+  fsUser = uid => this.firestore.collection(`users`).doc(uid);
+  fsUsers = () => this.firestore.collection('users');
 }
 export default Firebase;
