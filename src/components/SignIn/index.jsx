@@ -2,20 +2,18 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 
+import withStyles from '@material-ui/core/styles/withStyles';
+import Typography from '@material-ui/core/Typography';
+
 import { SignUpLink } from '../SignUp';
 import { PasswordForgetLink } from '../PasswordForget';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
+import * as constant from '../../constants/constant';
 
-const ERROR_CODE_ACCOUNT_EXISTS = 'auth/account-exists-with-different-credential';
-const ERROR_MSG_ACCOUNT_EXISTS = `
-An account with an E-Mail address to
-this social account already exists. Try to login from
-this account instead and associate your social accounts on
-your personal account page.
-`;
+import styles from './styles';
 
-const SignInPage = () => (
+const SignInPage = ({ classes }) => (
   <div>
     <h1>SignIn</h1>
     <SignInForm />
@@ -108,8 +106,8 @@ class SignInGoogleBase extends Component {
         this.props.history.push(ROUTES.HOME);
       })
       .catch(error => {
-        if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
-          error.message = ERROR_MSG_ACCOUNT_EXISTS;
+        if (error.code === constant.ERROR_CODE_ACCOUNT_EXISTS) {
+          error.message = constant.ERROR_MSG_ACCOUNT_EXISTS;
         }
         this.setState({ error });
       });
@@ -146,8 +144,8 @@ class SignInFacebookBase extends Component {
         this.props.history.push(ROUTES.HOME);
       })
       .catch(error => {
-        if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
-          error.message = ERROR_MSG_ACCOUNT_EXISTS;
+        if (error.code === constant.ERROR_CODE_ACCOUNT_EXISTS) {
+          error.message = constant.ERROR_MSG_ACCOUNT_EXISTS;
         }
         this.setState({ error });
       });
@@ -179,7 +177,7 @@ const SignInFacebook = compose(
   withFirebase
 )(SignInFacebookBase);
 
-export default SignInPage;
+export default  withStyles(styles)(SignInPage);
 
 export { SignInForm, SignInGoogle, SignInFacebook };
 
