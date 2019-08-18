@@ -55,16 +55,14 @@ const HomePage = ({ firebase, history }) => {
     return state.chats[index].messages[state.chats[index].messages.length - 1].sender !== state.email;
   };
 
-  const selectChat = async index => {
+  const selectChat =  index => {
     console.log('index', index);
 
     const newState = { ...state, selectedChat: index };
     console.log('newState +++', newState);
 
-    await setState(newState, messageRead());
+     setState(newState, () => messageRead());
     console.log('state +++', state);
-
-    
   };
 
   const goToChat = async (docKey, message) => {
@@ -121,16 +119,19 @@ const HomePage = ({ firebase, history }) => {
 
   const submitMessage = message => {
     const docKey = buildDocKey(
-      state.chats[state.selectedChat].users.filter(user => user !== state.email).get(0)
+      state.chats[state.selectedChat].users.filter(user => user !== state.email)[0]
     );
-    firebase.firebase
+    
+    console.log('docKey', docKey);
+
+    firebase.firestore
       .collection('chats')
       .doc(docKey)
       .update({
         messages: firebase.firestore.FieldValue.arrayUnion({
           sender: state.email,
           message: message,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         }),
         resiverHasRead: false
       });
