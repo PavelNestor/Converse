@@ -53,7 +53,7 @@ class Firebase {
   onAuthUserListener = (next, fallback) =>
     this.auth.onAuthStateChanged(authUser => {
       if (authUser) {
-        this.fsUser(authUser.uid)
+        this.fsUser(authUser.email)
           .get()
           .then(snapshot => {
             const dbUser = snapshot.data();
@@ -79,7 +79,7 @@ class Firebase {
   users = () => this.db.ref('users');
 
   // *** User API ***
-  fsUser = uid => this.firestore.collection(`users`).doc(uid);
+  fsUser = email => this.firestore.collection(`users`).doc(email);
   fsUsers = () => this.firestore.collection('users');
 }
 export default Firebase;

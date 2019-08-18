@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import { CssBaseline, Paper, Typography } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import SignUpLink from '../SignUp/SignUpLink';

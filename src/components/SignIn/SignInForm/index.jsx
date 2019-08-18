@@ -3,11 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 
 import withStyles from '@material-ui/core/styles/withStyles';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { Button, FormControl, Typography, Input, InputLabel } from '@material-ui/core';
 
 import { withFirebase } from '../../Firebase';
 import * as ROUTES from '../../../constants/routes';

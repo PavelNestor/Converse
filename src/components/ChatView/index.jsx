@@ -13,10 +13,10 @@ const ChatViewComponent = ({ classes, chat, user }) => {
     }
   }
 
-  React.useEffect(() => scrollToEnd(), [chat.messages]);
+  React.useEffect(() => scrollToEnd(), []); //TODO Change 
   
   return (
-    chat && (
+    chat ? (
       <>
         <div className={classes.chatHeader}>{
           chat.users.filter(usr => usr !== user).get(0)
@@ -31,6 +31,8 @@ const ChatViewComponent = ({ classes, chat, user }) => {
           })}
         </main>
       </>
+    ) : (
+      <div>No chats</div>
     )
   );
 };
