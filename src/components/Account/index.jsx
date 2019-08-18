@@ -1,10 +1,10 @@
 import React from 'react';
 import { compose } from 'recompose';
 
-import { AuthUserContext, withAuthorization, withEmailVerification } from '../Session';
-import { PasswordForgetForm } from '../PasswordForget';
-import PasswordChangeForm from '../PasswordChange';
-import { withFirebase } from '../Firebase';
+import { AuthUserContext, withAuthorization, withEmailVerification } from '../session';
+import { PasswordForgetForm } from '../passwordforget';
+import PasswordChangeForm from '../passwordchange';
+import { withFirebase } from '../firebase';
 
 const SIGN_IN_METHODS = [
   {

@@ -1,19 +1,14 @@
 import React from 'react';
 import { compose } from 'recompose';
 
-import { withAuthorization, withAuthentication, withEmailVerification } from '../Session';
-import ChatListComponent from '../ChatList';
+import { withAuthorization, withAuthentication, withEmailVerification } from '../session';
+import ChatListComponent from '../chatlist';
 import ChatTextBoxComponent from '../chattextbox';
 import * as ROUTES from '../../constants/routes';
-import ChatViewComponent from '../ChatView';
+import ChatViewComponent from '../chatview';
 import NewChatComponent from '../newchat';
 
 import styles from './styles';
-
-const fb = require("firebase");
-// Required for side-effects
-require("firebase/firestore");
-
 
 const initialState = {
   chats: [],

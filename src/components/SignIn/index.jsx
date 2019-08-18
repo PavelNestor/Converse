@@ -7,8 +7,8 @@ import withStyles from '@material-ui/core/styles/withStyles';
 
 import SignUpLink from '../SignUp/SignUpLink';
 import SignInForm from './SignInForm';
-import { PasswordForgetLink } from '../PasswordForget';
-import { withFirebase } from '../Firebase';
+import { PasswordForgetLink } from '../passwordforget';
+import { withFirebase } from '../firebase';
 import * as ROUTES from '../../constants/routes';
 import * as constant from '../../constants/constant';
 

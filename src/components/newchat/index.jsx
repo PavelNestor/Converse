@@ -12,7 +12,7 @@ import {
   withStyles
 } from '@material-ui/core';
 
-import { withAuthorization, withAuthentication, withEmailVerification } from '../Session';
+import { withAuthorization, withAuthentication, withEmailVerification } from '../session';
 
 import styles from './styles';
 

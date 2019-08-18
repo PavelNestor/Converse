@@ -5,7 +5,7 @@ import { compose } from 'recompose';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Button, FormControl, Typography, Input, InputLabel } from '@material-ui/core';
 
-import { withFirebase } from '../../Firebase';
+import { withFirebase } from '../../firebase';
 import * as ROUTES from '../../../constants/routes';
 
 import styles from './styles';

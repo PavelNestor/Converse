@@ -1,8 +1,8 @@
 import React from 'react';
 import { compose } from 'recompose';
 
-import { withFirebase } from '../Firebase';
-import { withAuthorization, withEmailVerification } from '../Session';
+import { withFirebase } from '../firebase';
+import { withAuthorization, withEmailVerification } from '../session';
 import * as ROLES from '../../constants/roles';
 
 class AdminPage extends React.Component {

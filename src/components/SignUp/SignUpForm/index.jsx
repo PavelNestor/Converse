@@ -9,7 +9,7 @@ import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import { withFirebase } from '../../Firebase';
+import { withFirebase } from '../../firebase';
 import * as ROUTES from '../../../constants/routes';
 import * as ROLES from '../../../constants/roles';
 import * as constant from '../../../constants/constant';
