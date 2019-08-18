@@ -10,12 +10,30 @@ const styles = theme => ({
       marginRight: 'auto',
     },
   },
+
   paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
     padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(3)}px`,
+    position: 'absolute',
+    width: '350px',
+    top: '50px',
+    left: 'calc(50% + 150px - 175px)'
+  },
+
+  input: {
+  },
+
+  form: {
+    width: '100%',
+    marginTop: theme.spacing(),
+  },
+
+  submit: {
+    marginTop: theme.spacing(3)
+  },
+
+  errorText: {
+    color: 'red',
+    textAlign: 'center'
   }
 });
 

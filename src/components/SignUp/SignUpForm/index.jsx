@@ -54,7 +54,7 @@ class SignUpFormBase extends Component {
       .then(authUser => {
         console.log('authUser', authUser);
         
-        return this.props.firebase.fsUser(authUser.user.uid).set({
+        return this.props.firebase.fsUser(authUser.user.email).set({
           username,
           email,
           roles
