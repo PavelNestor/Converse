@@ -10,6 +10,11 @@ import NewChatComponent from '../newchat';
 
 import styles from './styles';
 
+const fb = require("firebase");
+// Required for side-effects
+require("firebase/firestore");
+
+
 const initialState = {
   chats: [],
   email: null,
@@ -113,7 +118,7 @@ const HomePage = ({ firebase, history }) => {
       firebase.firestore
         .collection('chats')
         .doc(docKey)
-        .update({ resiverHasRead: true });
+        .update({ reciverHasRead: true });
     }
   };
 
@@ -123,17 +128,20 @@ const HomePage = ({ firebase, history }) => {
     );
     
     console.log('docKey', docKey);
+    console.log('state', state.chats[state.selectedChat].messages);
 
+    const newMessages = state.chats[state.selectedChat].messages;
+    newMessages.push({
+      sender: state.email,
+      message: message,
+      timestamp: Date.now(),
+    });
     firebase.firestore
       .collection('chats')
       .doc(docKey)
       .update({
-        messages: firebase.firestore.FieldValue.arrayUnion({
-          sender: state.email,
-          message: message,
-          timestamp: Date.now(),
-        }),
-        resiverHasRead: false
+        messages: newMessages,
+        reciverHasRead: false
       });
   };
 
