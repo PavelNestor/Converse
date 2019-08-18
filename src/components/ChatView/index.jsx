@@ -19,7 +19,7 @@ const ChatViewComponent = ({ classes, chat, user }) => {
     chat ? (
       <>
         <div className={classes.chatHeader}>{
-          chat.users.filter(usr => usr !== user).get(0)
+          chat.users.filter(usr => usr !== user)[0]
         }</div>
         <main id={'chatview-container'} className={classes.content}>
           {chat.messages.map((msg, index) => {

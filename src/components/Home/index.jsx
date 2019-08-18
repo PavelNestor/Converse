@@ -45,64 +45,71 @@ const HomePage = ({ firebase, history }) => {
 
   const newChatBtnClicked = () => {
     console.log('newChatBtnClicked');
-    
-    setState({ ...state, isNewChatVisible: true, selectedChat: null })
+
+    setState({ ...state, isNewChatVisible: true, selectedChat: null });
   };
 
-  const clickedChatWhereNotSender = index =>
-    state.chats[index].messages[state.chats[index].messages - 1].sender !== state.email;
+  const clickedChatWhereNotSender = index => {
+    console.log('state.chats[index]', state.chats[index]);
+
+    return state.chats[index].messages[state.chats[index].messages.length - 1].sender !== state.email;
+  };
 
   const selectChat = async index => {
     console.log('index', index);
 
-    const newState = { ...state, selectedChat: index }
+    const newState = { ...state, selectedChat: index };
     console.log('newState +++', newState);
-    
-    await setState(newState);
+
+    await setState(newState, messageRead());
     console.log('state +++', state);
+
     
-    messageRead();
   };
 
   const goToChat = async (docKey, message) => {
     console.log('docKey', docKey);
     console.log('message', message);
-    
+
     const usersInChat = docKey.split(':');
     const chat = state.chats.find(chat => usersInChat.every(user => chat.users.includes(user)));
     setState({ ...state, isNewChatVisible: false });
     await selectChat(state.chats.indexOf(chat));
-    submitMessage(message)
+    submitMessage(message);
   };
 
   const newChatSubmit = async chatObj => {
     console.log('chatObj', chatObj);
-    
+
     const docKey = buildDocKey(chatObj.sendTo);
-    await firebase.firestore.collection('chats').doc(docKey).set({
-      reciverHasRead: false,
-      users: [state.email, chatObj.sendTo],
-      messages: [{
-        message: chatObj.message,
-        sender: state.email
-      }]
-    })
+    await firebase.firestore
+      .collection('chats')
+      .doc(docKey)
+      .set({
+        reciverHasRead: false,
+        users: [state.email, chatObj.sendTo],
+        messages: [
+          {
+            message: chatObj.message,
+            sender: state.email
+          }
+        ]
+      });
     await setState({ ...state, isNewChatVisible: false }); //????
     selectChat(state.chats.length - 1);
-
   };
 
   const buildDocKey = friend => {
     console.log('friend', friend);
-    
-    return [state.email, friend].sort().join(':')
+
+    return [state.email, friend].sort().join(':');
   };
 
   const messageRead = () => {
     console.log('state', state);
-    
+
     const docKey = buildDocKey(
-      state.chats[state.selectedChat].users.filter(user => user !== state.email).get(0)
+      state.chats[state.selectedChat].users.filter(user => user !== state.email)[0]
     );
     if (clickedChatWhereNotSender(state.selectedChat)) {
       firebase.firestore
@@ -130,7 +137,7 @@ const HomePage = ({ firebase, history }) => {
   };
 
   return (
-    <div className='dashboard-container' id='dashboard-container'>
+    <div className="dashboard-container" id="dashboard-container">
       <ChatListComponent
         onNewChatBtn={newChatBtnClicked}
         onSelectChat={selectChat}
@@ -138,13 +145,21 @@ const HomePage = ({ firebase, history }) => {
         userEmail={state.email}
         selectedChatIndex={state.selectedChat}
       />
-      {state.isNewChatVisible ? (
+      {!state.isNewChatVisible ? (
         <>
-          <ChatViewComponent test={console.log('state.isNewChatVisible -',state.isNewChatVisible)} user={state.email} chat={state.chats[state.selectedChat]} />
-          <ChatTextBoxComponent onSubmitMessage={submitMessage} onMessageRead={messageRead}/>
+          <ChatViewComponent
+            test={console.log('state.isNewChatVisible -', state.isNewChatVisible)}
+            user={state.email}
+            chat={state.chats[state.selectedChat]}
+          />
+          {state.selectedChat !== null && <ChatTextBoxComponent onSubmitMessage={submitMessage} onMessageRead={messageRead} />}
         </>
       ) : (
-        <NewChatComponent test={console.log('state.isNewChatVisible', state.isNewChatVisible)} onGoToChat={goToChat} onNewChatSubmit={newChatSubmit}/>
+        <NewChatComponent
+          test={console.log('state.isNewChatVisible', state.isNewChatVisible)}
+          onGoToChat={goToChat}
+          onNewChatSubmit={newChatSubmit}
+        />
       )}
     </div>
   );
