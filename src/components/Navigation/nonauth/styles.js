@@ -9,16 +9,16 @@ const styles = theme => ({
   },
 
   burger: {
-    fontSize: '2.8rem'
+    fontSize: '1.5rem'
   },
 
   title: {
     flexGrow: 1,
-    fontSize: '1.8rem'
+    fontSize: '1rem'
   },
 
   logo: {
-    width: '5rem',
+    width: '3rem',
   },
 
   link: {

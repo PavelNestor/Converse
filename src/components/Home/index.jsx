@@ -44,31 +44,19 @@ const HomePage = ({ firebase, history }) => {
   React.useEffect(() => getChats(), []);
 
   const newChatBtnClicked = () => {
-    console.log('newChatBtnClicked');
-
     setState({ ...state, isNewChatVisible: true, selectedChat: null });
   };
 
   const clickedChatWhereNotSender = index => {
-    console.log('state.chats[index]', state.chats[index]);
-
     return state.chats[index].messages[state.chats[index].messages.length - 1].sender !== state.email;
   };
 
   const selectChat =  index => {
-    console.log('index', index);
-
     const newState = { ...state, selectedChat: index };
-    console.log('newState +++', newState);
-
      setState(newState, () => messageRead());
-    console.log('state +++', state);
   };
 
   const goToChat = async (docKey, message) => {
-    console.log('docKey', docKey);
-    console.log('message', message);
-
     const usersInChat = docKey.split(':');
     const chat = state.chats.find(chat => usersInChat.every(user => chat.users.includes(user)));
     setState({ ...state, isNewChatVisible: false });
@@ -77,8 +65,6 @@ const HomePage = ({ firebase, history }) => {
   };
 
   const newChatSubmit = async chatObj => {
-    console.log('chatObj', chatObj);
-
     const docKey = buildDocKey(chatObj.sendTo);
     await firebase.firestore
       .collection('chats')
@@ -98,14 +84,10 @@ const HomePage = ({ firebase, history }) => {
   };
 
   const buildDocKey = friend => {
-    console.log('friend', friend);
-
     return [state.email, friend].sort().join(':');
   };
 
   const messageRead = () => {
-    console.log('state', state);
-
     const docKey = buildDocKey(
       state.chats[state.selectedChat].users.filter(user => user !== state.email)[0]
     );
@@ -121,10 +103,6 @@ const HomePage = ({ firebase, history }) => {
     const docKey = buildDocKey(
       state.chats[state.selectedChat].users.filter(user => user !== state.email)[0]
     );
-    
-    console.log('docKey', docKey);
-    console.log('state', state.chats[state.selectedChat].messages);
-
     const newMessages = state.chats[state.selectedChat].messages;
     newMessages.push({
       sender: state.email,
