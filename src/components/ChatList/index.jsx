@@ -11,13 +11,11 @@ import {
   Avatar,
   Typography,
   Divider,
-  Button
 } from '@material-ui/core';
 
 import styles from './styles';
 
 class ChatListComponent extends React.Component {
-  newChat = () => this.props.onNewChatBtn();
 
   selectChat = index => {
     this.props.onSelectChat(index);
@@ -30,15 +28,6 @@ class ChatListComponent extends React.Component {
 
     return (
       <main className={classes.root}>
-        <Button
-          className={classes.newChatButton}
-          color="primary"
-          fullWidth
-          onClick={this.newChat}
-          variant="contained"
-        >
-          New Message
-        </Button>
         {chats && (
           <List>
             {chats.map((chat, index) => {

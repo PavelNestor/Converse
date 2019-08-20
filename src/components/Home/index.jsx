@@ -6,7 +6,6 @@ import ChatListComponent from '../chatlist';
 import ChatTextBoxComponent from '../chattextbox';
 import * as ROUTES from '../../constants/routes';
 import ChatViewComponent from '../chatview';
-import NewChatComponent from '../newchat';
 
 import styles from './styles';
 
@@ -14,7 +13,6 @@ const initialState = {
   chats: [],
   email: null,
   friends: [],
-  isNewChatVisible: false,
   selectedChat: null
 };
 
@@ -43,10 +41,7 @@ const HomePage = ({ firebase, history }) => {
 
   React.useEffect(() => getChats(), []);
 
-  const newChatBtnClicked = () => {
-    setState({ ...state, isNewChatVisible: true, selectedChat: null });
-  };
-
+  
   const clickedChatWhereNotSender = index => {
     return state.chats[index].messages[state.chats[index].messages.length - 1].sender !== state.email;
   };
@@ -62,25 +57,6 @@ const HomePage = ({ firebase, history }) => {
     setState({ ...state, isNewChatVisible: false });
     await selectChat(state.chats.indexOf(chat));
     submitMessage(message);
-  };
-
-  const newChatSubmit = async chatObj => {
-    const docKey = buildDocKey(chatObj.sendTo);
-    await firebase.firestore
-      .collection('chats')
-      .doc(docKey)
-      .set({
-        reciverHasRead: false,
-        users: [state.email, chatObj.sendTo],
-        messages: [
-          {
-            message: chatObj.message,
-            sender: state.email
-          }
-        ]
-      });
-    await setState({ ...state, isNewChatVisible: false }); //????
-    selectChat(state.chats.length - 1);
   };
 
   const buildDocKey = friend => {
@@ -121,13 +97,12 @@ const HomePage = ({ firebase, history }) => {
   return (
     <div className="dashboard-container" id="dashboard-container">
       <ChatListComponent
-        onNewChatBtn={newChatBtnClicked}
         onSelectChat={selectChat}
         chats={state.chats}
         userEmail={state.email}
         selectedChatIndex={state.selectedChat}
       />
-      {!state.isNewChatVisible ? (
+      {!state.isNewChatVisible && (
         <>
           <ChatViewComponent
             test={console.log('state.isNewChatVisible -', state.isNewChatVisible)}
@@ -136,12 +111,6 @@ const HomePage = ({ firebase, history }) => {
           />
           {state.selectedChat !== null && <ChatTextBoxComponent onSubmitMessage={submitMessage} onMessageRead={messageRead} />}
         </>
-      ) : (
-        <NewChatComponent
-          test={console.log('state.isNewChatVisible', state.isNewChatVisible)}
-          onGoToChat={goToChat}
-          onNewChatSubmit={newChatSubmit}
-        />
       )}
     </div>
   );
